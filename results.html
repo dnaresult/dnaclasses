@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA Classes - Student Results</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e6f2e6; /* light green */
+        color: #000; /* black text */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background-color: #fff; /* white box */
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    h1 {
+        text-align: center;
+        color: #006600; /* dark green */
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 2px solid #006600;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #006600;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #004d00;
+    }
+
+    .result {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px solid #006600;
+        border-radius: 5px;
+        background-color: #f0fff0;
+    }
+
+    .result p {
+        margin: 5px 0;
+    }
+
+    .error {
+        color: red;
+        text-align: center;
+    }
+
+    .sample {
+        font-size: 12px;
+        color: #333;
+        text-align: center;
+        margin-top: 15px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>DNA Classes Results</h1>
+    <input type="text" id="enroll" placeholder="Enter Enrollment Number">
+    <button onclick="showResult()">Check Result</button>
+
+    <div class="result" id="result" style="display:none;"></div>
+    <div class="error" id="error" style="display:none;">Enrollment number not found!</div>
+
+    <div class="sample">
+        <p>Example Enrollment Numbers: 8210055, 8210056</p>
+    </div>
+</div>
+
+<script>
+const studentsData = {
+   "8206064": {
+    "Name": "prabhas yadav",
+    "Course code": "M001",
+    "Class": 6,
+    "Percentage": 36,
+    "Result": "fail",
+    "Rank": 2,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8206069": {
+    "Name": "Anushka  kumari rauniyar",
+    "Course code": "M001",
+    "Class": 6,
+    "Percentage": 52,
+    "Result": "pass",
+    "Rank": 1,
+    "Remarks": "AVERAGE"
+  },
+  "8208021": {
+    "Name": "Salman Khan",
+    "Course code": "Ms001",
+    "Class": 8,
+    "Percentage": 60,
+    "Result": "pass",
+    "Rank": 5,
+    "Remarks": "GOOD"
+  },
+  "8208027": {
+    "Name": "Jayprasad Sah",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": 70,
+    "Result": "pass",
+    "Rank": 3,
+    "Remarks": "VERYGOOD"
+  },
+  "8208034": {
+    "Name": "Ritika Rauniyar",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": 60,
+    "Result": "pass",
+    "Rank": 5,
+    "Remarks": "GOOD"
+  },
+  "8208035": {
+    "Name": "Kishan Mandal",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": 94,
+    "Result": "pass",
+    "Rank": 2,
+    "Remarks": "OUTSTANDING"
+  },
+  "8208037": {
+    "Name": "Priyanshu Singh",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": 70,
+    "Result": "pass",
+    "Rank": 3,
+    "Remarks": "VERYGOOD"
+  },
+  "8208039": {
+    "Name": "adrien Subba",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": 100,
+    "Result": "pass",
+    "Rank": 1,
+    "Remarks": "OUTSTANDING PRIDE OF DNA"
+  },
+  "8208041": {
+    "Name": "Prince Kumar Sah",
+    "Course code": "MS001",
+    "Class": 8,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8208042": {
+    "Name": "Yubin mahato",
+    "Course code": "M003",
+    "Class": 8,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8208047": {
+    "Name": "Prince jayswal",
+    "Course code": "M001",
+    "Class": 8,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8208052": {
+    "Name": "Pinkey Mukhiya",
+    "Course code": "M001",
+    "Class": 8,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8208065": {
+    "Name": "Sawan samrat yadav",
+    "Course code": "M001",
+    "Class": 8,
+    "Percentage": 58,
+    "Result": "pass",
+    "Rank": 7,
+    "Remarks": "AVERAGE"
+  },
+  "8208075": {
+    "Name": "priyanka   Nayak",
+    "Course code": "MS003",
+    "Class": 8,
+    "Percentage": 28,
+    "Result": "fail",
+    "Rank": 8,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209004": {
+    "Name": "Diksha Singh",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 90,
+    "Result": "pass",
+    "Rank": 3,
+    "Remarks": "OUTSTANDING"
+  },
+  "8209005": {
+    "Name": "Annu Kumari Rauniyar",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 87,
+    "Result": "pass",
+    "Rank": 4,
+    "Remarks": "EXCELLENT"
+  },
+  "8209006": {
+    "Name": "Rupa Rajak",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 49,
+    "Result": "pass",
+    "Rank": 7,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209010": {
+    "Name": "Archana Sah",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209013": {
+    "Name": "Asmita Yadav",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 95,
+    "Result": "pass",
+    "Rank": 1,
+    "Remarks": "OUTSTANDING"
+  },
+  "8209026": {
+    "Name": "Bidya Sagar Das",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209031": {
+    "Name": "Chandan kr. Yadav",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 94,
+    "Result": "pass",
+    "Rank": 2,
+    "Remarks": "OUTSTANDING"
+  },
+  "8209033": {
+    "Name": "Laxmi narayan purbey",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 50,
+    "Result": "pass",
+    "Rank": 6,
+    "Remarks": "AVERAGE"
+  },
+  "8209038": {
+    "Name": "Aayushi Sah",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209040": {
+    "Name": "Sawan Kumar Sah",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209048": {
+    "Name": "khusbu Mandal",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 39,
+    "Result": "pass",
+    "Rank": 9,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209051": {
+    "Name": "Nisha Yadav",
+    "Course code": "M003",
+    "Class": 9,
+    "Percentage": 36,
+    "Result": "pass",
+    "Rank": 6,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209059": {
+    "Name": "Prashant Mukhiya",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209061": {
+    "Name": "Utsav Sah",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 47,
+    "Result": "pass",
+    "Rank": 8,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209062": {
+    "Name": "Sulav kr. Sah",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 23,
+    "Result": "fail",
+    "Rank": 11,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209070": {
+    "Name": "Ratan  mishra",
+    "Course code": "MS001",
+    "Class": 9,
+    "Percentage": 20,
+    "Result": "fail",
+    "Rank": 12,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209071": {
+    "Name": "Naitik  Sha",
+    "Course code": "MS003",
+    "Class": 9,
+    "Percentage": 26,
+    "Result": "fail",
+    "Rank": 10,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209073": {
+    "Name": "Adarsha Yadav",
+    "Course code": "MS003",
+    "Class": 9,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8209074": {
+    "Name": "Aryan  Mandal",
+    "Course code": "MS003",
+    "Class": 9,
+    "Percentage": 18,
+    "Result": "fail",
+    "Rank": 13,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8209076": {
+    "Name": "Adarsha Sah",
+    "Course code": "S001",
+    "Class": 9,
+    "Percentage": 62,
+    "Result": "pass",
+    "Rank": 4,
+    "Remarks": "GOOD"
+  },
+  "8210001": {
+    "Name": "Shiwani Mandal",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 44,
+    "Result": "pass",
+    "Rank": 11,
+    "Remarks": "could be improved"
+  },
+  "8210002": {
+    "Name": "Shubham Kumar Sah",
+    "Course code": "MS003",
+    "Class": 10,
+    "Percentage": 52,
+    "Result": "pass",
+    "Rank": 7,
+    "Remarks": "AVERAGE"
+  },
+  "8210003": {
+    "Name": "Sumit Pandey",
+    "Course code": "S003",
+    "Class": 10,
+    "Percentage": 90,
+    "Result": "pass",
+    "Rank": 1,
+    "Remarks": "OUTSTANDING"
+  },
+  "8210007": {
+    "Name": "Upasana Sah",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 59,
+    "Result": "pass",
+    "Rank": 4,
+    "Remarks": "AVERAGE"
+  },
+  "8210008": {
+    "Name": "Subham Yadav",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": 16,
+    "Result": "fail",
+    "Rank": 14,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210012": {
+    "Name": "Sushant Jha",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 87,
+    "Result": "pass",
+    "Rank": 1,
+    "Remarks": "EXCELLENT"
+  },
+  "8210014": {
+    "Name": "Ridhima Sakaria",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 51,
+    "Result": "pass",
+    "Rank": 8,
+    "Remarks": "AVERAGE"
+  },
+  "8210015": {
+    "Name": "Vamika Sah",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210018": {
+    "Name": "Nancy Singh",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 47,
+    "Result": "pass",
+    "Rank": 10,
+    "Remarks": "average"
+  },
+  "8210020": {
+    "Name": "Bishal Nayak",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 77,
+    "Result": "pass",
+    "Rank": 2,
+    "Remarks": "VERYGOOD"
+  },
+  "8210022": {
+    "Name": "Ritesh Kumar Yadav",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 28,
+    "Result": "fail",
+    "Rank": 10,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210023": {
+    "Name": "Neha Jaiswal",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 20,
+    "Result": "fail",
+    "Rank": 12,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210025": {
+    "Name": "Prem Singh",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210028": {
+    "Name": "Anusha Sah",
+    "Course code": "MS003",
+    "Class": 10,
+    "Percentage": 19,
+    "Result": "fail",
+    "Rank": 13,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210030": {
+    "Name": "Prem kumar Sah",
+    "Course code": "MS003",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210036": {
+    "Name": "Deepika Yadav",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 28,
+    "Result": "fail",
+    "Rank": 10,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210044": {
+    "Name": "Chandani Sah",
+    "Course code": "M003",
+    "Class": 10,
+    "Percentage": 44,
+    "Result": "pass",
+    "Rank": 5,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210046": {
+    "Name": "Radhika kumariSah",
+    "Course code": "M003",
+    "Class": 10,
+    "Percentage": 34,
+    "Result": "fail",
+    "Rank": 8,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210049": {
+    "Name": "Sunita kumari mandal",
+    "Course code": "S001",
+    "Class": 10,
+    "Percentage": 63,
+    "Result": "pass",
+    "Rank": 3,
+    "Remarks": "GOOD"
+  },
+  "8210050": {
+    "Name": "Raman kumar yadav",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 48,
+    "Result": "pass",
+    "Rank": 9,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210053": {
+    "Name": "Ritesh  Yadav",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": 34,
+    "Result": "fail",
+    "Rank": 8,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210054": {
+    "Name": "Monika Yadav",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": 28,
+    "Result": "fail",
+    "Rank": 10,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210055": {
+    "Name": "Bandana kri. Sah",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": 36,
+    "Result": "pass",
+    "Rank": 6,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210058": {
+    "Name": "Ragni mandal",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 56,
+    "Result": "pass",
+    "Rank": 6,
+    "Remarks": "AVERAGE"
+  },
+  "8210060": {
+    "Name": "Anuradha kri. Mandal",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": 24,
+    "Result": "fail",
+    "Rank": 13,
+    "Remarks": "NEEDS IMPROVEMENT"
+  },
+  "8210063": {
+    "Name": "Amrita mukhiya",
+    "Course code": "M001",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210066": {
+    "Name": "Shirishi yaqdav",
+    "Course code": "S001",
+    "Class": 10,
+    "Percentage": 84,
+    "Result": "pass",
+    "Rank": 2,
+    "Remarks": "EXCELLENT"
+  },
+  "8210067": {
+    "Name": "Suraj raut",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210068": {
+    "Name": "Sumit yadav",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": "",
+    "Result": "",
+    "Rank": "",
+    "Remarks": "Absent"
+  },
+  "8210072": {
+    "Name": "Aaditya kr. Sah",
+    "Course code": "S003",
+    "Class": 10,
+    "Percentage": 64,
+    "Result": "pass",
+    "Rank": 3,
+    "Remarks": "GOOD"
+  },
+  "9210016": {
+    "Name": "Sajan Kumar Sah",
+    "Course code": "MS001",
+    "Class": 10,
+    "Percentage": 59,
+    "Result": "pass",
+    "Rank": 4,
+    "Remarks": "AVERAGE"
+  },
+  "Sibendra": {
+    "Name": "Sibendra",
+    "Course code": "",
+    "Class": "",
+    "Percentage": 67,
+    "Result": "pass",
+    "Rank": 5,
+    "Remarks": "GOOD"
+  }
+};
+
+function showResult() {
+    const enrollInput = document.getElementById('enroll').value.trim();
+    const resultDiv = document.getElementById('result');
+    const errorDiv = document.getElementById('error');
+
+    resultDiv.style.display = 'none';
+    errorDiv.style.display = 'none';
+
+    if (!enrollInput) {
+        errorDiv.innerText = "Please enter enrollment number!";
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    if (studentsData[enrollInput]) {
+        const student = studentsData[enrollInput];
+        resultDiv.innerHTML = `
+            <p><strong>Name:</strong> ${student.Name}</p>
+            <p><strong>Course Code:</strong> ${student["Course code"]}</p>
+            <p><strong>Class:</strong> ${student.Class}</p>
+            <p><strong>Percentage:</strong> ${student.Percentage}</p>
+            <p><strong>Result:</strong> ${student.Result || "Pending"}</p>
+            <p><strong>Rank:</strong> ${student.Rank}</p>
+            <p><strong>Remarks:</strong> ${student.Remarks}</p>
+        `;
+        resultDiv.style.display = 'block';
+    } else {
+        errorDiv.innerText = "Enrollment number not found!";
+        errorDiv.style.display = 'block';
+    }
+}
+</script>
+
+</body>
+</html>
